@@ -35,10 +35,10 @@ fun AddEditDetails(
         topBar = {
             AppBar(
                 title = if (id != 0L) stringResource(id = R.string.edit_wish) else stringResource(id = R.string.add_wish),
-                onBackNavClicked = { navController.popBackStack() }
+                onBackNavClicked = { navController.navigateUp() }
             )
         }
-    ) {
+    ) { it ->
         Column(
             modifier = Modifier
                 .padding(it)
