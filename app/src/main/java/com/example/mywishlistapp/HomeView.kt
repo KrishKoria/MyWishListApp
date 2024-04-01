@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
@@ -22,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.mywishlistapp.data.DummyWishes
 import com.example.mywishlistapp.data.Wish
 
 
@@ -54,7 +56,11 @@ fun HomeView() {
                 .fillMaxSize()
                 .padding(it)
         ) {
-
+            items(DummyWishes.wishes) { wish ->
+                WishItem(wish = wish, onWishClicked = {
+                    Toast.makeText(context, "Wish Item Clicked", Toast.LENGTH_SHORT).show()
+                })
+            }
         }
     }
 }
@@ -64,16 +70,18 @@ fun WishItem(
     wish: Wish,
     onWishClicked: () -> Unit
 ) {
-    Card(modifier = Modifier
-        .fillMaxWidth()
-        .padding(top = 8.dp, start = 8.dp, end = 8.dp)
-        .clickable { onWishClicked() },
-        elevation = CardDefaults.cardElevation(10.dp),
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp, start = 8.dp, end = 8.dp)
+            .clickable { onWishClicked() },
+        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = Color.White,
+            contentColor = Color.Black
         )
     ) {
-        Column(modifier = Modifier.padding(16.dp)){
+        Column(modifier = Modifier.padding(16.dp)) {
             Text(text = wish.title, fontWeight = FontWeight.ExtraBold)
             Text(text = wish.description)
         }
