@@ -1,8 +1,7 @@
-package com.example.mywishlistapp
+package com.example.mywishlistapp.data
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.example.mywishlistapp.data.Wish
 
 @Database(entities = [Wish::class], version = 1, exportSchema = false)
 abstract class WishDatabase : RoomDatabase() {

@@ -1,4 +1,4 @@
-package com.example.mywishlistapp
+package com.example.mywishlistapp.data
 
 import androidx.room.Dao
 import androidx.room.Delete
