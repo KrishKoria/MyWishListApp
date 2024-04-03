@@ -86,13 +86,13 @@ fun AddEditDetails(
             Button(onClick = {
                 if (viewModel.wishTitleState.isNotEmpty() && viewModel.wishDescriptionState.isNotEmpty()) {
                     if (id != 0L) {
-//                        viewModel.updateWish(
-//                            Wish(
-//                                id = id,
-//                                title = viewModel.wishTitleState.trim(),
-//                                description = viewModel.wishDescriptionState.trim()
-//                            )
-//                        )
+                        viewModel.updateWish(
+                            Wish(
+                                id = id,
+                                title = viewModel.wishTitleState.trim(),
+                                description = viewModel.wishDescriptionState.trim()
+                            )
+                        )
                         snackMessage.value = "Wish updated successfully"
                     } else {
                         viewModel.addWish(
