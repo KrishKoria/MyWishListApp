@@ -44,7 +44,7 @@ fun HomeView(
             FloatingActionButton(
                 onClick = {
 //                    Toast.makeText(context, "Floating Button Clicked", Toast.LENGTH_SHORT).show()
-                    navController.navigate(Screen.AddDetailScreen.route)
+                    navController.navigate(Screen.AddDetailScreen.route + "/0L")
                 },
                 modifier = Modifier.padding(20.dp),
                 contentColor = Color.White,
@@ -64,7 +64,9 @@ fun HomeView(
         ) {
             items(wishList.value) { wish ->
                 WishItem(wish = wish, onWishClicked = {
-                    Toast.makeText(context, "Wish Item Clicked", Toast.LENGTH_SHORT).show()
+                    val id = wish.id
+                    navController.navigate(Screen.AddDetailScreen.route + "/$id")
+//                    Toast.makeText(context, "Wish Item Clicked", Toast.LENGTH_SHORT).show()
                 })
             }
         }
