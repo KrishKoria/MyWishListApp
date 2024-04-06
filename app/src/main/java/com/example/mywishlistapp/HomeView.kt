@@ -1,9 +1,6 @@
-@file:Suppress("DEPRECATION")
-
 package com.example.mywishlistapp
 
 import android.widget.Toast
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -13,19 +10,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-//noinspection UsingMaterialAndMaterial3Libraries
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.DismissDirection
-//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
-//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.FractionalThreshold
-//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
-//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.rememberDismissState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -37,8 +30,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -55,6 +52,7 @@ fun HomeView(
     viewModel: WishViewModel
 ) {
     val context = LocalContext.current
+    var show by remember { mutableStateOf(true) }
     Scaffold(
         topBar = {
             AppBar(title = "My Wish List", onBackNavClicked = {
@@ -88,6 +86,7 @@ fun HomeView(
                     confirmStateChange = {
                         if (it == DismissValue.DismissedToEnd || it == DismissValue.DismissedToStart) {
                             viewModel.deleteWish(wish)
+                            show = false
                         }
                         true
                     }
@@ -95,28 +94,29 @@ fun HomeView(
                 SwipeToDismiss(
                     state = dismissState,
                     background = {
-                        val color by animateColorAsState(
-                            when (dismissState.dismissDirection) {
-                                DismissDirection.EndToStart -> Color.Red
-                                DismissDirection.StartToEnd -> Color.Red
-                                else -> Color.Transparent
-                            }, label = ""
-                        )
-                        val alignment = Alignment.CenterEnd
+                        val color = when (dismissState.dismissDirection) {
+                            DismissDirection.StartToEnd -> Color(0xFFFF1744)
+                            DismissDirection.EndToStart -> Color(0xFFFF1744)
+                            null -> Color.Transparent
+                        }
                         Box(
+                            contentAlignment = Alignment.CenterEnd,
                             modifier = Modifier
-                                .padding(horizontal = 15.dp)
                                 .fillMaxSize()
-                                .background(color),
-                            contentAlignment = alignment
-                        ){
-                            Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete Icon", tint = Color.White)
+                                .clip(shape = RoundedCornerShape(16.dp))
+                                .background(color)
+                                .padding(top = 4.dp, start = 4.dp, end = 4.dp)
+
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "Delete Icon",
+                                tint = Color.White
+                            )
                         }
                     },
+                    dismissThresholds = {FractionalThreshold(0.5f)},
                     directions = setOf(DismissDirection.EndToStart),
-                    dismissThresholds = {
-                        FractionalThreshold(1f)
-                    },
                     dismissContent = {
                         WishItem(wish = wish, onWishClicked = {
                             val id = wish.id
@@ -124,7 +124,6 @@ fun HomeView(
                         })
                     }
                 )
-
             }
         }
     }
@@ -138,13 +137,14 @@ fun WishItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 8.dp, start = 8.dp, end = 8.dp)
+            .padding(top = 2.dp, start = 2.dp, end = 2.dp)
             .clickable { onWishClicked() },
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White,
             contentColor = Color.Black
-        )
+        ),
+        shape = RoundedCornerShape(16.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = wish.title, fontWeight = FontWeight.ExtraBold)
